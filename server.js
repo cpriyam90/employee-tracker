@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const consTable = require('console.table');
+const db_connect = require("./db/connection")
 require('dotenv').config();
 const roles = [];
 const roleId = [];
@@ -12,17 +13,6 @@ const dpt = [];
 const dptIdNum = [];
 const emp = [];
 const empIdNum = [];
-
-//sql connection
-const db_connect = mysql.createConnection(
-    {
-      host: 'localhost',
-      database: process.env.DB_NAME,
-      password: process.env.DB_PASSWORD,
-      user: process.env.DB_USER,
-},
-console.log(`connected to employee tracker.`)
-);
 
 //function to start prompts when application is invoked
 function start (){
@@ -164,5 +154,36 @@ function viewRoles(){
 }).catch(err => console.log(err))
 }
 
+async function addRole(){
+  await db_connect.promise().query('SELECT * FROM department').then(([data]) => {
+    for (let i = 0; i < data.length; i++) {
+     dpt.push(data[i].name);
+     dptIdNum.push(data[i].id);
+    }
+  }).catch(err => console.log(err))
+  inquirer.prompt([
+    {
+      type:'input',
+      message: "Role Title: ",
+      name: "title"
+    },
+    {
+      type:'input',
+      message: "Salary: ",
+      name: "salary"
+    },
+    {
+      type:'list',
+      message: 'Which department does this role belong to?',
+      choices: dpt,
+      name: "dpt"
+    },
+  ]).then(data => {
+      let dptId = dpt.indexOf(data.dpt) + 1
+      db_connect.promise().query('INSERT INTO role SET ?', {title: data.title, salary: data.salary, department_id: dptId}).then(([data]) => {
+        viewRoles();
+        }).catch(err => console.log(err))
+})
+}
 
 start();
