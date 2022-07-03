@@ -136,4 +136,33 @@ async function addEmployee(){
   })
 }
 
+function allDepartments(){
+  db_connect.promise().query('SELECT * FROM department').then(([data]) => {
+    console.table(data)
+    start();
+  }).catch(err => console.log(err))
+}
+
+function addDepartment(){
+inquirer.prompt([
+  {
+    type:'input',
+    message: "Department Title: ",
+    name: "title"
+  }
+]).then(data => {
+  db_connect.promise().query('INSERT INTO department SET ?', {name: data.title}).then(([data]) => {
+  allDepartments();
+  })
+}).catch(err => console.log(err))
+}
+
+function viewRoles(){
+  db_connect.promise().query('SELECT * FROM role').then(([data]) => {
+  console.table(data)
+  start();
+}).catch(err => console.log(err))
+}
+
+
 start();
