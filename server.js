@@ -2,7 +2,6 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const consTable = require('console.table');
 const db_connect = require("./db/connection")
-require('dotenv').config();
 const roles = [];
 const roleId = [];
 const newRole = [];
