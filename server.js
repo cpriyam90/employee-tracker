@@ -185,4 +185,23 @@ async function addRole(){
 })
 }
 
+function updateEmployee () {
+  inquirer.prompt([
+    {
+      type:'input',
+      message: 'Which employee would you like to update the role for?',
+      name: 'emp'
+    },
+    {
+      type:'input',
+      message: 'Enter the new role ID for this employee',
+      name: 'role_id'
+    }
+  ]).then(data => {
+    db_connect.promise().query('update employee SET role_id=? WHERE id=?',[data.role_id,data.emp]).then(([data]) => {
+      viewRoles();
+      }).catch(err => console.log(err))
+})
+}
+
 start();
