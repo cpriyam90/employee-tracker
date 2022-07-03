@@ -71,3 +71,27 @@ function start (){
     }
   })
 }
+
+function employeeInfo(){
+  db_connect.promise().query('SELECT * FROM employee').then(([data]) => {
+    console.table(data)
+    start();
+  }).catch(err => console.log(err))
+}
+
+async function addEmployee(){
+  await db_connect.promise().query('SELECT * FROM role').then(([data]) => {
+
+    for (let i = 0; i < data.length; i++) {
+     roles.push(data[i].title);
+     roleId.push(data[i].id);
+    }
+  }).catch(err => console.log(err))
+
+  await db_connect.promise().query('SELECT * FROM employee').then(([data]) => {
+    for (let i = 0; i < data.length; i++) {
+     mgr.push(`${data[i].first_name} ${data[i].last_name}`);
+     mgrId.push(data[i].id);
+    }
+    mgr.push('None')
+  }).catch(err => console.log(err))}
