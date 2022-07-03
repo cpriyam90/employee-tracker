@@ -13,8 +13,7 @@ const dptIdNum = [];
 const emp = [];
 const empIdNum = [];
 
-
-
+//sql connection
 const db_connect = mysql.createConnection(
     {
       host: 'localhost',
@@ -25,6 +24,7 @@ const db_connect = mysql.createConnection(
 console.log(`connected to employee tracker.`)
 );
 
+//function to start prompts when application is invoked
 function start (){
   inquirer.prompt([
     {
@@ -94,4 +94,44 @@ async function addEmployee(){
      mgrId.push(data[i].id);
     }
     mgr.push('None')
-  }).catch(err => console.log(err))}
+  }).catch(err => console.log(err))
+
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "First Name: ",
+      name: "firstName",
+    },
+    {
+      type: "input",
+      message: "Last Name: ",
+      name: "lastName",
+    },
+    {
+      type: "list",
+      message: "Employee Role: ",
+      choices: roles,
+      name: "role",
+    },
+    {
+      type: "list",
+      message: "Employee Manager: ",
+      choices: mgr,
+      name: 'mgr'
+    }
+  ]).then(data => {
+    if (data.mgr === 'None') {
+      let roleId = roles.indexOf(data.role) + 1
+      let mgrId = null;
+      db_connect.promise().query('INSERT INTO employee SET ?', {first_name: data.firstName, last_name: data.lastName, role_id: roleId, manager_id: mgrId}).then(([data]) => {
+        employeeInfo();
+        }).catch(err => console.log(err))
+    } else{
+      let roleId = roles.indexOf(data.role) + 1
+      let mgrId = mgr.indexOf(data.mgr) + 1
+      db_connect.promise().query('INSERT INTO employee SET ?', {first_name: data.firstName, last_name: data.lastName, role_id: roleId, manager_id: mgrId}).then(([data]) => {
+        employeeInfo();
+        }).catch(err => console.log(err))
+    }
+  })
+}
