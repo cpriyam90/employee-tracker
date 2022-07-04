@@ -56,5 +56,5 @@ The user can not only see existing employee names, roles, and departments, but a
 
 ## Screenshots
 See below screenshots of generated Readme
-![alt="Screenshot generated readme"](./assets/images/)
-![alt="Screenshot of generated readme"](./assets/images/)
+![alt="Screenshot of terminal"](./assets/images/screenshot.png)
+
