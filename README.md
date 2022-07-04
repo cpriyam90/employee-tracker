@@ -33,7 +33,7 @@ This command-line application from helps to manage a company's employee database
 
 
 ## Video-Link
-**[Click here for video link]()**
+**[Click here for video link](https://youtu.be/Nfc8NvGV-LQ)**
 
 
 ## Credits/Citations
